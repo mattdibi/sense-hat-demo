@@ -3,36 +3,92 @@ backend: "python"
 
 input [
   {
-    name: "CH0"
+    name: "ACC_X"
     data_type: TYPE_FP32
     dims: [ 1 ]
   }
 ]
 input [
   {
-    name: "CH1"
-    data_type: TYPE_INT32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "CH2"
-    data_type: TYPE_BOOL
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "CH3"
+    name: "ACC_Y"
     data_type: TYPE_FP32
     dims: [ 1 ]
   }
 ]
 input [
   {
-    name: "CH4"
-    data_type: TYPE_UINT8
+    name: "ACC_Z"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "GYRO_X"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "GYRO_Y"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "GYRO_Z"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "HUMIDITY"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "MAGNET_X"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "MAGNET_Y"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "MAGNET_Z"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "PRESSURE"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "TEMP_HUM"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "TEMP_PRESS"
+    data_type: TYPE_FP32
     dims: [ 1 ]
   }
 ]
@@ -40,7 +96,7 @@ output [
   {
     name: "INPUT0"
     data_type: TYPE_FP32
-    dims: [ 1, 5 ]
+    dims: [ 1, 12 ]
   }
 ]
 instance_group [{ kind: KIND_CPU }]
