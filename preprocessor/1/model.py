@@ -70,24 +70,22 @@ class TritonPythonModel:
         # Every Python backend must iterate over everyone of the requests
         # and create a pb_utils.InferenceResponse for each of them.
         for request in requests:
-            # Get input CH0
-            ch_0 = pb_utils.get_input_tensor_by_name(request, "CH0")
-            # Get input CH1
-            ch_1 = pb_utils.get_input_tensor_by_name(request, "CH1")
-            # Get input CH2
-            ch_2 = pb_utils.get_input_tensor_by_name(request, "CH2")
-            # Get input CH3
-            ch_3 = pb_utils.get_input_tensor_by_name(request, "CH3")
-            # Get input CH4
-            ch_4 = pb_utils.get_input_tensor_by_name(request, "CH4")
 
-            ch_0 = ch_0.as_numpy()
-            ch_1 = ch_1.as_numpy()
-            ch_2 = ch_2.as_numpy()
-            ch_3 = ch_3.as_numpy()
-            ch_4 = ch_4.as_numpy()
+            ch_0 = pb_utils.get_input_tensor_by_name(request, "ACC_X").as_numpy()
+            ch_1 = pb_utils.get_input_tensor_by_name(request, "ACC_Y").as_numpy()
+            ch_2 = pb_utils.get_input_tensor_by_name(request, "ACC_Z").as_numpy()
+            ch_3 = pb_utils.get_input_tensor_by_name(request, "GYRO_X").as_numpy()
+            ch_4 = pb_utils.get_input_tensor_by_name(request, "GYRO_Y").as_numpy()
+            ch_5 = pb_utils.get_input_tensor_by_name(request, "GYRO_Z").as_numpy()
+            ch_6 = pb_utils.get_input_tensor_by_name(request, "HUMIDITY").as_numpy()
+            ch_7 = pb_utils.get_input_tensor_by_name(request, "MAGNET_X").as_numpy()
+            ch_8 = pb_utils.get_input_tensor_by_name(request, "MAGNET_Y").as_numpy()
+            ch_9 = pb_utils.get_input_tensor_by_name(request, "MAGNET_Z").as_numpy()
+            ch_10 = pb_utils.get_input_tensor_by_name(request, "PRESSURE").as_numpy()
+            ch_11 = pb_utils.get_input_tensor_by_name(request, "TEMP_HUM").as_numpy()
+            ch_12 = pb_utils.get_input_tensor_by_name(request, "TEMP_PRESS").as_numpy()
 
-            out_0 = np.array([ch_0, ch_1, ch_2, ch_3, ch_4]).transpose()
+            out_0 = np.array([ch_0, ch_1, ch_2, ch_3, ch_4, ch_5, ch_6, ch_7, ch_8, ch_9, ch_10, ch_11, ch_12]).transpose()
 
             # Create output tensors. You need pb_utils.Tensor
             # objects to create pb_utils.InferenceResponse.
