@@ -71,26 +71,33 @@ class TritonPythonModel:
         # and create a pb_utils.InferenceResponse for each of them.
         for request in requests:
 
-            ch_0 = pb_utils.get_input_tensor_by_name(request, "ACC_X").as_numpy()
-            ch_1 = pb_utils.get_input_tensor_by_name(request, "ACC_Y").as_numpy()
-            ch_2 = pb_utils.get_input_tensor_by_name(request, "ACC_Z").as_numpy()
-            ch_3 = pb_utils.get_input_tensor_by_name(request, "GYRO_X").as_numpy()
-            ch_4 = pb_utils.get_input_tensor_by_name(request, "GYRO_Y").as_numpy()
-            ch_5 = pb_utils.get_input_tensor_by_name(request, "GYRO_Z").as_numpy()
-            ch_6 = pb_utils.get_input_tensor_by_name(request, "HUMIDITY").as_numpy()
-            ch_7 = pb_utils.get_input_tensor_by_name(request, "MAGNET_X").as_numpy()
-            ch_8 = pb_utils.get_input_tensor_by_name(request, "MAGNET_Y").as_numpy()
-            ch_9 = pb_utils.get_input_tensor_by_name(request, "MAGNET_Z").as_numpy()
-            ch_10 = pb_utils.get_input_tensor_by_name(request, "PRESSURE").as_numpy()
-            ch_11 = pb_utils.get_input_tensor_by_name(request, "TEMP_HUM").as_numpy()
-            ch_12 = pb_utils.get_input_tensor_by_name(request, "TEMP_PRESS").as_numpy()
+            acc_x      = pb_utils.get_input_tensor_by_name(request, "ACC_X").as_numpy()
+            acc_y      = pb_utils.get_input_tensor_by_name(request, "ACC_Y").as_numpy()
+            acc_z      = pb_utils.get_input_tensor_by_name(request, "ACC_Z").as_numpy()
+            gyro_x     = pb_utils.get_input_tensor_by_name(request, "GYRO_X").as_numpy()
+            gyro_y     = pb_utils.get_input_tensor_by_name(request, "GYRO_Y").as_numpy()
+            gyro_z     = pb_utils.get_input_tensor_by_name(request, "GYRO_Z").as_numpy()
+            humidity   = pb_utils.get_input_tensor_by_name(request, "HUMIDITY").as_numpy()
+            magnet_x   = pb_utils.get_input_tensor_by_name(request, "MAGNET_X").as_numpy()
+            magnet_y   = pb_utils.get_input_tensor_by_name(request, "MAGNET_Y").as_numpy()
+            magnet_z   = pb_utils.get_input_tensor_by_name(request, "MAGNET_Z").as_numpy()
+            pressure   = pb_utils.get_input_tensor_by_name(request, "PRESSURE").as_numpy()
+            temp_hum   = pb_utils.get_input_tensor_by_name(request, "TEMP_HUM").as_numpy()
+            temp_press = pb_utils.get_input_tensor_by_name(request, "TEMP_PRESS").as_numpy()
 
-            out_0 = np.array([ch_0, ch_1, ch_2, ch_3, ch_4, ch_5, ch_6, ch_7, ch_8, ch_9, ch_10, ch_11, ch_12]).transpose()
+            out_0 = np.array([magnet_x, magnet_z, magnet_y, acc_y, acc_x, acc_z, pressure, temp_press, temp_hum, humidity, gyro_x, gyro_y, gyro_z])
+
+            #                MAGNET_X   MAGNET_Z   MAGNET_Y     ACC_Y     ACC_X     ACC_Z    PRESSURE   TEMP_PRESS   TEMP_HUM   HUMIDITY    GYRO_X    GYRO_Y    GYRO_Z
+            mean = np.array([-6.662364, 15.270208, -27.288259, 0.030234, 0.011407, 0.992252, 998.028151, 35.338573, 36.764190, 21.211922, -0.026414, 0.008353, 0.005063])
+            std  = np.array([ 5.250766,  0.853466,   1.319709, 0.028152, 0.089823, 0.024537,   0.035404,  0.376381,  0.336227,  0.613346,  1.096187, 0.498696, 0.146555])
+
+            # Standard scaling
+            out_0_scaled = (out_0 - mean)/std
 
             # Create output tensors. You need pb_utils.Tensor
             # objects to create pb_utils.InferenceResponse.
             out_tensor_0 = pb_utils.Tensor("INPUT0",
-                                           out_0.astype(output0_dtype))
+                                           out_0_scaled.astype(output0_dtype))
 
             # Create InferenceResponse. You can set an error here in case
             # there was a problem with handling this inference request.
