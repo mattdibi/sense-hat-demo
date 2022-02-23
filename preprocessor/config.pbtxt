@@ -1,0 +1,46 @@
+name: "preprocessor"
+backend: "python"
+
+input [
+  {
+    name: "CH0"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "CH1"
+    data_type: TYPE_INT32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "CH2"
+    data_type: TYPE_BOOL
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "CH3"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+input [
+  {
+    name: "CH4"
+    data_type: TYPE_UINT8
+    dims: [ 1 ]
+  }
+]
+output [
+  {
+    name: "INPUT0"
+    data_type: TYPE_FP32
+    dims: [ 1, 5 ]
+  }
+]
+instance_group [{ kind: KIND_CPU }]
