@@ -1,7 +1,7 @@
 # sense-hat-demo
 Kura AI Wire Component Sense Hat-based demo
 
-## Instructions
+## Instructions
 
 Running the models inside triton
 
