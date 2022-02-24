@@ -85,7 +85,7 @@ class TritonPythonModel:
             temp_hum   = pb_utils.get_input_tensor_by_name(request, "TEMP_HUM").as_numpy()
             temp_press = pb_utils.get_input_tensor_by_name(request, "TEMP_PRESS").as_numpy()
 
-            out_0 = np.array([magnet_x, magnet_z, magnet_y, acc_y, acc_x, acc_z, pressure, temp_press, temp_hum, humidity, gyro_x, gyro_y, gyro_z])
+            out_0 = np.array([magnet_x, magnet_z, magnet_y, acc_y, acc_x, acc_z, pressure, temp_press, temp_hum, humidity, gyro_x, gyro_y, gyro_z]).transpose()
 
             #                MAGNET_X   MAGNET_Z   MAGNET_Y     ACC_Y     ACC_X     ACC_Z    PRESSURE   TEMP_PRESS   TEMP_HUM   HUMIDITY    GYRO_X    GYRO_Y    GYRO_Z
             mean = np.array([-6.662364, 15.270208, -27.288259, 0.030234, 0.011407, 0.992252, 998.028151, 35.338573, 36.764190, 21.211922, -0.026414, 0.008353, 0.005063])
