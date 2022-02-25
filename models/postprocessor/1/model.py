@@ -35,11 +35,16 @@ class TritonPythonModel:
 
         # Get OUTPUT0 configuration
         output0_config = pb_utils.get_output_config_by_name(
-            model_config, "RESULT0")
+            model_config, "ANOMALY_SCORE0")
+        # Get OUTPUT0 configuration
+        output1_config = pb_utils.get_output_config_by_name(
+            model_config, "ANOMALY0")
 
         # Convert Triton types to numpy types
         self.output0_dtype = pb_utils.triton_string_to_numpy(
             output0_config['data_type'])
+        self.output1_dtype = pb_utils.triton_string_to_numpy(
+            output1_config['data_type'])
 
     def execute(self, requests):
         """`execute` MUST be implemented in every Python model. `execute`
@@ -64,25 +69,30 @@ class TritonPythonModel:
         """
 
         output0_dtype = self.output0_dtype
+        output1_dtype = self.output1_dtype
 
         responses = []
 
         # Every Python backend must iterate over everyone of the requests
         # and create a pb_utils.InferenceResponse for each of them.
         for request in requests:
+            THRESHOLD = 0.25
+
             # Get input
-            in_0 = pb_utils.get_input_tensor_by_name(request, "OUTPUT0").as_numpy()
+            x_recon = pb_utils.get_input_tensor_by_name(request, "RECONSTR0").as_numpy()
+            x_orig = pb_utils.get_input_tensor_by_name(request, "ORIG0").as_numpy()
 
-            # Sum array elements and convert to int
-            sum_in_0 = np.sum(in_0).astype(int)
+            # Get Mean square error between reconstructed input and original input
+            reconstruction_score = np.mean((x_orig - x_recon)**2, axis=1)
 
-            # Check if sum is even
-            out_0 = np.array([sum_in_0 % 2 == 0])
+            anomaly = reconstruction_score > THRESHOLD
 
             # Create output tensors. You need pb_utils.Tensor
             # objects to create pb_utils.InferenceResponse.
-            out_tensor_0 = pb_utils.Tensor("RESULT0",
-                                           out_0.astype(output0_dtype))
+            out_tensor_0 = pb_utils.Tensor("ANOMALY_SCORE0",
+                                           reconstruction_score.astype(output0_dtype))
+            out_tensor_1 = pb_utils.Tensor("ANOMALY0",
+                                           anomaly.astype(output1_dtype))
 
             # Create InferenceResponse. You can set an error here in case
             # there was a problem with handling this inference request.
@@ -92,7 +102,7 @@ class TritonPythonModel:
             # pb_utils.InferenceResponse(
             #    output_tensors=..., TritonError("An error occured"))
             inference_response = pb_utils.InferenceResponse(
-                output_tensors=[out_tensor_0])
+                output_tensors=[out_tensor_0, out_tensor_1])
             responses.append(inference_response)
 
         # You should return a list of pb_utils.InferenceResponse. Length

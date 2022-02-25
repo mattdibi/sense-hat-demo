@@ -3,14 +3,28 @@ backend: "python"
 
 input [
   {
-    name: "OUTPUT0"
+    name: "RECONSTR0"
     data_type: TYPE_FP32
-    dims: [ 1, 5 ]
+    dims: [ 1, 13 ]
+  }
+]
+input [
+  {
+    name: "ORIG0"
+    data_type: TYPE_FP32
+    dims: [ 1, 13 ]
   }
 ]
 output [
   {
-    name: "RESULT0"
+    name: "ANOMALY_SCORE0"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  }
+]
+output [
+  {
+    name: "ANOMALY0"
     data_type: TYPE_BOOL
     dims: [ 1 ]
   }
