@@ -1,5 +1,8 @@
 .DS_Store
 
+### Trained models ###
+saved_model
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
