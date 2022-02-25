@@ -54,7 +54,7 @@ def main():
 
     # The encoder will consist of a number of dense layers that decrease in size
     # as we taper down towards the bottleneck of the network, the latent space
-    input_data = Input(shape=(input_dim,), name='encoder_input')
+    input_data = Input(shape=(input_dim,), name='INPUT0')
 
     # hidden layers
     encoder = Dense(48,activation='tanh', name='encoder_1')(input_data)
@@ -72,7 +72,7 @@ def main():
     decoder = Dropout(.1)(decoder)
 
     # The output is the same dimension as the input data we are reconstructing
-    reconstructed_data = Dense(input_dim, activation='linear', name='reconstructed_data')(decoder)
+    reconstructed_data = Dense(input_dim, activation='linear', name='OUTPUT0')(decoder)
 
     autoencoder_model = Model(input_data, reconstructed_data)
     autoencoder_model.summary()
