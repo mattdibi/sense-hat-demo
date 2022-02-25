@@ -5,12 +5,17 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 
+import matplotlib.pyplot as plt
+
 import tensorflow as tf
 from tensorflow.keras import optimizers
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense, Dropout
 
 def main():
+    # ########
+    # Preprocessing
+    # ########
     train_data_path = "train-raw.csv"
     train_data = pd.read_csv(train_data_path)
 
@@ -38,7 +43,9 @@ def main():
     x_train = x_train.astype(np.float32)
     x_test = x_test.astype(np.float32)
 
+    # ########
     # Model
+    # ########
     input_dim = x_train.shape[1]
 
     batch_size = 64
@@ -78,7 +85,20 @@ def main():
         batch_size=batch_size,
         validation_data=(x_test, x_test))
 
+    autoencoder_model.save("saved_model/autoencoder")
 
+    # ########
+    # Postprocessing
+    # ########
+    x_test_recon  = autoencoder_model.predict(x_test)
+    reconstruction_scores = np.mean((x_test - x_test_recon)**2, axis=1)
+
+    anomaly_data = pd.DataFrame({'recon_score':reconstruction_scores})
+    print(anomaly_data.describe())
+
+    # plt.xlabel('Reconstruction Score')
+    # anomaly_data['recon_score'].plot.hist(bins=200, range=[.04, 1])
+    # plt.show()
 
 if __name__ == '__main__':
     main()
