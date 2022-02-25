@@ -96,7 +96,7 @@ output [
   {
     name: "INPUT0"
     data_type: TYPE_FP32
-    dims: [ 13 ]
+    dims: [ 1, 13 ]
   }
 ]
 instance_group [{ kind: KIND_CPU }]
