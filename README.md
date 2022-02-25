@@ -42,6 +42,12 @@ Train the model with the data provided in this repository with:
 cd training && ./main.py
 ```
 
+Move the trained model in the Triton model repository with:
+
+```bash
+cp -r training/saved_model/autoencoder models/tf_autoencoder_fp32/1
+```
+
 ## Inference
 
 For running these models inside Triton, navigate to this repository and run:
