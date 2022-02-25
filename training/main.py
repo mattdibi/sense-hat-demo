@@ -96,8 +96,14 @@ def main():
     anomaly_data = pd.DataFrame({'recon_score':reconstruction_scores})
     print(anomaly_data.describe())
 
+    # Compute threshold from test set
+    alpha = 1.25
+    threshold = np.max(reconstruction_scores) * alpha
+    print(threshold)
+
     # plt.xlabel('Reconstruction Score')
     # anomaly_data['recon_score'].plot.hist(bins=200, range=[.04, 1])
+    # plt.vlines(threshold, 0, 10, linestyle='dashed')
     # plt.show()
 
 if __name__ == '__main__':
