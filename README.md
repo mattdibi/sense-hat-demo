@@ -44,10 +44,14 @@ Train the model with the data provided in this repository with:
 cd training && ./main.py
 ```
 
-Move the trained model in the Triton model repository with:
+Move the trained model in the Triton model repository and rename it to `model.savedmodel`
 
 ```bash
 cp -r training/saved_model/autoencoder models/tf_autoencoder_fp32/1
+```
+
+```bash
+mv models/tf_autoencoder_fp32/1/autoencoder models/tf_autoencoder_fp32/1/model.savedmodel
 ```
 
 ## Inference
