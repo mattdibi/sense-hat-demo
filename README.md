@@ -7,13 +7,13 @@ For running these models inside Triton, navigate to this repository and run:
 
 ```bash
 docker run --rm \
-    -p8000:8000 \
-    -p8001:8001 \
-    -p8002:8002 \
+    -p4000:8000 \
+    -p4001:8001 \
+    -p4002:8002 \
     --shm-size=150m \
     -v $(pwd)/models:/models \
     nvcr.io/nvidia/tritonserver:22.01-py3 \
-    tritonserver --model-repository=/models
+    tritonserver --model-repository=/models --model-control-mode=explicit
 ```
 
 Excpected models folder structure:
