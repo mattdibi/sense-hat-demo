@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import argparse
+import os.path
+
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
@@ -61,10 +64,29 @@ def create_model(input_dim):
     return autoencoder_model
 
 def main():
+    DEFAULT_TRAIN_DATA_PATH = "train-raw.csv"
+    DEFAULT_SAVED_MODEL_NAME = "autoencoder"
+
+    # Get options
+    parser = argparse.ArgumentParser(
+            description="Training script for Kura AI Wire Component anomaly detection")
+    parser.add_argument(
+            "-t", "--train_data_path",
+            help="Path to .csv training set",
+            type=str, required=False, default=DEFAULT_TRAIN_DATA_PATH)
+    parser.add_argument(
+            "-s", "--saved_model_name",
+            help="Folder where the trained model will be saved to",
+            type=str, required=False, default=DEFAULT_SAVED_MODEL_NAME)
+
+    args = parser.parse_args()
+
+    train_data_path = args.train_data_path
+    trained_model_path = os.path.join("saved_model", args.saved_model_name)
+
     # ########
     # Preprocessing
     # ########
-    train_data_path = "train-raw.csv"
     train_data = pd.read_csv(train_data_path)
 
     scaled_train_data = preprocessing(train_data)
@@ -94,7 +116,7 @@ def main():
         batch_size=batch_size,
         validation_data=(x_test, x_test))
 
-    autoencoder_model.save("saved_model/autoencoder")
+    autoencoder_model.save(trained_model_path)
 
     # ########
     # Postprocessing
