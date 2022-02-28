@@ -52,27 +52,6 @@ input [
 ]
 input [
   {
-    name: "MAGNET_X"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "MAGNET_Y"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "MAGNET_Z"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
     name: "PRESSURE"
     data_type: TYPE_FP32
     dims: [ 1 ]
@@ -96,7 +75,7 @@ output [
   {
     name: "INPUT0"
     data_type: TYPE_FP32
-    dims: [ 1, 13 ]
+    dims: [ 1, 10 ]
   }
 ]
 instance_group [{ kind: KIND_CPU }]

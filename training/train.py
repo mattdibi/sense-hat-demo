@@ -6,6 +6,7 @@ import os.path
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
 
 from tensorflow.keras import optimizers
 from tensorflow.keras.models import Model
@@ -13,7 +14,7 @@ from tensorflow.keras.layers import Input, Dense, Dropout
 
 
 def get_options():
-    DEFAULT_TRAIN_DATA_PATH = "train-raw.csv"
+    DEFAULT_TRAIN_DATA_PATH = "new-train-raw.csv"
     DEFAULT_SAVED_MODEL_NAME = os.path.join("saved_model", "autoencoder")
 
     # Get options
@@ -39,19 +40,23 @@ def get_options():
 
 def preprocessing(data):
     # Select features
-    features = ['MAGNET_X', ' MAGNET_Z', ' MAGNET_Y', ' ACC_Y',
-                ' ACC_X', ' ACC_Z', ' PRESSURE', ' TEMP_PRESS', ' TEMP_HUM',
-                ' HUMIDITY', ' GYRO_X', ' GYRO_Y', ' GYRO_Z']
+    features = ['ACC_Y', 'ACC_X', 'ACC_Z',
+                'PRESSURE', 'TEMP_PRESS', 'TEMP_HUM',
+                'HUMIDITY', 'GYRO_X', 'GYRO_Y', 'GYRO_Z']
 
     data = data[features]
+
+    print("Data used in the Triton preprocessor")
+    print("-----------Min-----------")
+    print(data.min())
+    print("-----------Max-----------")
+    print(data.max())
+    print("-------------------------")
+
     data = data.to_numpy()
 
-    # MinMax scaling
-    #         MAGNET_X   MAGNET_Z   MAGNET_Y     ACC_Y     ACC_X     ACC_Z    PRESSURE   TEMP_PRESS   TEMP_HUM   HUMIDITY    GYRO_X    GYRO_Y    GYRO_Z
-    min = np.array([-1.8199598e+01, 1.3105305e+01, -3.1945429e+01, -1.0663300e-01, -3.1721205e-01, 8.5927510e-01, 9.9792896e+02, 3.4666668e+01, 3.6153427e+01, 2.0175404e+01, -2.1469840e+00, -1.3511374e+00, -5.0122184e-01])
-    max = np.array([3.7974422e+00, 1.7207603e+01, -2.4966690e+01, 1.1758627e-01, 2.4764843e-01, 1.1285601e+00, 9.9812500e+02, 3.6097916e+01, 3.7271065e+01, 2.3081772e+01, 1.8424674e+00, 7.2500044e-01, 4.4410592e-01])
-
-    scaled_train_data = (data - min) / (max - min)
+    scaler = MinMaxScaler()
+    scaled_train_data = scaler.fit_transform(data)
 
     return scaled_train_data
 
@@ -65,19 +70,19 @@ def create_model(input_dim):
     input_data = Input(shape=(input_dim,), name='INPUT0')
 
     # hidden layers
-    encoder = Dense(48, activation='tanh', name='encoder_1')(input_data)
-    encoder = Dropout(.1)(encoder)
+    encoder = Dense(24, activation='tanh', name='encoder_1')(input_data)
+    encoder = Dropout(.15)(encoder)
     encoder = Dense(16, activation='tanh', name='encoder_2')(encoder)
-    encoder = Dropout(.1)(encoder)
+    encoder = Dropout(.15)(encoder)
 
     # bottleneck layer
     latent_encoding = Dense(latent_dim, activation='linear', name='latent_encoding')(encoder)
 
     # The decoder network is a mirror image of the encoder network
     decoder = Dense(16, activation='tanh', name='decoder_1')(latent_encoding)
-    decoder = Dropout(.1)(decoder)
-    decoder = Dense(48, activation='tanh', name='decoder_2')(decoder)
-    decoder = Dropout(.1)(decoder)
+    decoder = Dropout(.15)(decoder)
+    decoder = Dense(24, activation='tanh', name='decoder_2')(decoder)
+    decoder = Dropout(.15)(decoder)
 
     # The output is the same dimension as the input data we are reconstructing
     reconstructed_data = Dense(input_dim, activation='linear', name='OUTPUT0')(decoder)
@@ -97,7 +102,7 @@ def main():
 
     scaled_train_data = preprocessing(train_data)
 
-    x_train, x_test = train_test_split(scaled_train_data, test_size=0.15, random_state=42)
+    x_train, x_test = train_test_split(scaled_train_data, test_size=0.3, random_state=42)
     x_train = x_train.astype(np.float32)
     x_test = x_test.astype(np.float32)
 
@@ -111,7 +116,7 @@ def main():
     # Training
     # ########
     batch_size = 64
-    max_epochs = 15
+    max_epochs = 10
     learning_rate = .0001
 
     opt = optimizers.Adam(learning_rate=learning_rate)
@@ -134,7 +139,7 @@ def main():
     print(anomaly_data.describe())
 
     # Compute threshold from test set
-    alpha = 1.25
+    alpha = 1.5
     threshold = np.max(reconstruction_scores) * alpha
     print("Anomaly score threshold: %f" % threshold)
 

@@ -52,27 +52,6 @@ input [
 ]
 input [
   {
-    name: "MAGNET_X"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "MAGNET_Y"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "MAGNET_Z"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
     name: "PRESSURE"
     data_type: TYPE_FP32
     dims: [ 1 ]
@@ -138,18 +117,6 @@ ensemble_scheduling {
       input_map{
           key: "HUMIDITY"
           value: "HUMIDITY"
-      }
-      input_map{
-          key: "MAGNET_X"
-          value: "MAGNET_X"
-      }
-      input_map{
-          key: "MAGNET_Y"
-          value: "MAGNET_Y"
-      }
-      input_map{
-          key: "MAGNET_Z"
-          value: "MAGNET_Z"
       }
       input_map{
           key: "PRESSURE"

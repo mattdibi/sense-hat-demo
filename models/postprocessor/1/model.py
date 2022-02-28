@@ -76,7 +76,7 @@ class TritonPythonModel:
         # Every Python backend must iterate over everyone of the requests
         # and create a pb_utils.InferenceResponse for each of them.
         for request in requests:
-            THRESHOLD = 0.25
+            THRESHOLD = 0.20
 
             # Get input
             x_recon = pb_utils.get_input_tensor_by_name(request, "RECONSTR0").as_numpy()

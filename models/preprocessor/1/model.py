@@ -78,18 +78,15 @@ class TritonPythonModel:
             gyro_y     = pb_utils.get_input_tensor_by_name(request, "GYRO_Y").as_numpy()
             gyro_z     = pb_utils.get_input_tensor_by_name(request, "GYRO_Z").as_numpy()
             humidity   = pb_utils.get_input_tensor_by_name(request, "HUMIDITY").as_numpy()
-            magnet_x   = pb_utils.get_input_tensor_by_name(request, "MAGNET_X").as_numpy()
-            magnet_y   = pb_utils.get_input_tensor_by_name(request, "MAGNET_Y").as_numpy()
-            magnet_z   = pb_utils.get_input_tensor_by_name(request, "MAGNET_Z").as_numpy()
             pressure   = pb_utils.get_input_tensor_by_name(request, "PRESSURE").as_numpy()
             temp_hum   = pb_utils.get_input_tensor_by_name(request, "TEMP_HUM").as_numpy()
             temp_press = pb_utils.get_input_tensor_by_name(request, "TEMP_PRESS").as_numpy()
 
-            out_0 = np.array([magnet_x, magnet_z, magnet_y, acc_y, acc_x, acc_z, pressure, temp_press, temp_hum, humidity, gyro_x, gyro_y, gyro_z]).transpose()
+            out_0 = np.array([acc_y, acc_x, acc_z, pressure, temp_press, temp_hum, humidity, gyro_x, gyro_y, gyro_z]).transpose()
 
-            #                MAGNET_X   MAGNET_Z   MAGNET_Y     ACC_Y     ACC_X     ACC_Z    PRESSURE   TEMP_PRESS   TEMP_HUM   HUMIDITY    GYRO_X    GYRO_Y    GYRO_Z
-            min = np.array([-1.8199598e+01, 1.3105305e+01, -3.1945429e+01, -1.0663300e-01, -3.1721205e-01, 8.5927510e-01, 9.9792896e+02, 3.4666668e+01, 3.6153427e+01, 2.0175404e+01, -2.1469840e+00, -1.3511374e+00, -5.0122184e-01])
-            max = np.array([ 3.7974422e+00, 1.7207603e+01, -2.4966690e+01, 1.1758627e-01, 2.4764843e-01, 1.1285601e+00, 9.9812500e+02, 3.6097916e+01, 3.7271065e+01, 2.3081772e+01, 1.8424674e+00, 7.2500044e-01, 4.4410592e-01])
+            #                  ACC_Y     ACC_X     ACC_Z    PRESSURE   TEMP_PRESS   TEMP_HUM   HUMIDITY    GYRO_X    GYRO_Y    GYRO_Z
+            min = np.array([-0.132551, -0.049693, 0.759847, 976.001709, 38.724998, 40.220890, 13.003981, -1.937896, -0.265019, -0.250647])
+            max = np.array([ 0.093099, 0.150289, 1.177543, 1007.996338, 46.093750, 48.355824, 23.506138, 1.923712, 0.219204, 0.671759])
 
             # MinMax scaling
             out_0_scaled = (out_0 - min)/(max - min)
