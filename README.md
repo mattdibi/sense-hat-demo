@@ -50,6 +50,21 @@ Train the model with the data provided in this repository with:
 ./train.py
 ```
 
+Train script options:
+
+```bash
+usage: train.py [-h] [-t TRAIN_DATA_PATH] [-s SAVED_MODEL_NAME]
+
+Training script for Kura AI Wire Component anomaly detection
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t TRAIN_DATA_PATH, --train_data_path TRAIN_DATA_PATH
+                        Path to .csv training set (default: new-train-raw.csv)
+  -s SAVED_MODEL_NAME, --saved_model_name SAVED_MODEL_NAME
+                        Folder where the trained model will be saved to (default: saved_model/autoencoder)
+```
+
 Move the trained model in the Triton model repository and rename it to `model.savedmodel`
 
 ```bash
