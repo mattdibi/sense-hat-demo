@@ -38,10 +38,16 @@ pip3 install -r training/requirements.txt
 
 ### Model training
 
+Decompress the datasets
+
+```bash
+cd training && unzip *.zip
+```
+
 Train the model with the data provided in this repository with:
 
 ```bash
-cd training && ./main.py
+./train.py
 ```
 
 Move the trained model in the Triton model repository and rename it to `model.savedmodel`
