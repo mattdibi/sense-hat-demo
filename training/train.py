@@ -6,6 +6,7 @@ import os.path
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
 
 from tensorflow.keras import optimizers
 from tensorflow.keras.models import Model
@@ -46,20 +47,16 @@ def preprocessing(data):
     data = data[features]
 
     print("Data used in the Triton preprocessor")
-    print("-------Min--------")
+    print("-----------Min-----------")
     print(data.min())
-    print("-------Max--------")
+    print("-----------Max-----------")
     print(data.max())
-    print("------------------")
+    print("-------------------------")
 
     data = data.to_numpy()
 
-    # MinMax scaling
-    #                  ACC_Y     ACC_X     ACC_Z    PRESSURE   TEMP_PRESS   TEMP_HUM   HUMIDITY    GYRO_X    GYRO_Y    GYRO_Z
-    min = np.array([-0.132551, -0.049693, 0.759847, 976.001709, 38.724998, 40.220890, 13.003981, -1.937896, -0.265019, -0.250647])
-    max = np.array([ 0.093099, 0.150289, 1.177543, 1007.996338, 46.093750, 48.355824, 23.506138, 1.923712, 0.219204, 0.671759])
-
-    scaled_train_data = (data - min) / (max - min)
+    scaler = MinMaxScaler()
+    scaled_train_data = scaler.fit_transform(data)
 
     return scaled_train_data
 
