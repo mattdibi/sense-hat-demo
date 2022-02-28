@@ -102,7 +102,7 @@ def main():
 
     scaled_train_data = preprocessing(train_data)
 
-    x_train, x_test = train_test_split(scaled_train_data, test_size=0.15, random_state=42)
+    x_train, x_test = train_test_split(scaled_train_data, test_size=0.3, random_state=42)
     x_train = x_train.astype(np.float32)
     x_test = x_test.astype(np.float32)
 
