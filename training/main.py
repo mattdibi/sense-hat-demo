@@ -69,7 +69,8 @@ def main():
 
     # Get options
     parser = argparse.ArgumentParser(
-            description="Training script for Kura AI Wire Component anomaly detection")
+            description="Training script for Kura AI Wire Component anomaly detection",
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
             "-t", "--train_data_path",
             help="Path to .csv training set",
