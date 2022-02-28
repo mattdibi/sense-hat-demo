@@ -40,8 +40,8 @@ def get_options():
 def preprocessing(data):
     # Select features
     features = ['MAGNET_X', ' MAGNET_Z', ' MAGNET_Y', ' ACC_Y',
-       ' ACC_X', ' ACC_Z', ' PRESSURE', ' TEMP_PRESS', ' TEMP_HUM', ' HUMIDITY',
-       ' GYRO_X', ' GYRO_Y', ' GYRO_Z']
+                ' ACC_X', ' ACC_Z', ' PRESSURE', ' TEMP_PRESS', ' TEMP_HUM',
+                ' HUMIDITY', ' GYRO_X', ' GYRO_Y', ' GYRO_Z']
 
     data = data[features]
     data = data.to_numpy()
@@ -49,7 +49,7 @@ def preprocessing(data):
     # MinMax scaling
     #         MAGNET_X   MAGNET_Z   MAGNET_Y     ACC_Y     ACC_X     ACC_Z    PRESSURE   TEMP_PRESS   TEMP_HUM   HUMIDITY    GYRO_X    GYRO_Y    GYRO_Z
     min = np.array([-1.8199598e+01, 1.3105305e+01, -3.1945429e+01, -1.0663300e-01, -3.1721205e-01, 8.5927510e-01, 9.9792896e+02, 3.4666668e+01, 3.6153427e+01, 2.0175404e+01, -2.1469840e+00, -1.3511374e+00, -5.0122184e-01])
-    max = np.array([ 3.7974422e+00, 1.7207603e+01, -2.4966690e+01, 1.1758627e-01, 2.4764843e-01, 1.1285601e+00, 9.9812500e+02, 3.6097916e+01, 3.7271065e+01, 2.3081772e+01, 1.8424674e+00, 7.2500044e-01, 4.4410592e-01])
+    max = np.array([3.7974422e+00, 1.7207603e+01, -2.4966690e+01, 1.1758627e-01, 2.4764843e-01, 1.1285601e+00, 9.9812500e+02, 3.6097916e+01, 3.7271065e+01, 2.3081772e+01, 1.8424674e+00, 7.2500044e-01, 4.4410592e-01])
 
     scaled_train_data = (data - min) / (max - min)
 
@@ -65,9 +65,9 @@ def create_model(input_dim):
     input_data = Input(shape=(input_dim,), name='INPUT0')
 
     # hidden layers
-    encoder = Dense(48,activation='tanh', name='encoder_1')(input_data)
+    encoder = Dense(48, activation='tanh', name='encoder_1')(input_data)
     encoder = Dropout(.1)(encoder)
-    encoder = Dense(16,activation='tanh', name='encoder_2')(encoder)
+    encoder = Dense(16, activation='tanh', name='encoder_2')(encoder)
     encoder = Dropout(.1)(encoder)
 
     # bottleneck layer
@@ -116,27 +116,28 @@ def main():
 
     opt = optimizers.Adam(learning_rate=learning_rate)
     autoencoder_model.compile(optimizer=opt, loss='mse', metrics=['accuracy'])
-    train_history = autoencoder_model.fit(x_train, x_train,
-        shuffle=True,
-        epochs=max_epochs,
-        batch_size=batch_size,
-        validation_data=(x_test, x_test))
+    autoencoder_model.fit(x_train, x_train,
+                          shuffle=True,
+                          epochs=max_epochs,
+                          batch_size=batch_size,
+                          validation_data=(x_test, x_test))
 
     autoencoder_model.save(trained_model_path)
 
     # ########
     # Postprocessing
     # ########
-    x_test_recon  = autoencoder_model.predict(x_test)
-    reconstruction_scores = np.mean((x_test - x_test_recon)**2, axis=1) # MSE
+    x_test_recon = autoencoder_model.predict(x_test)
+    reconstruction_scores = np.mean((x_test - x_test_recon)**2, axis=1)  # MSE
 
-    anomaly_data = pd.DataFrame({'recon_score':reconstruction_scores})
+    anomaly_data = pd.DataFrame({'recon_score': reconstruction_scores})
     print(anomaly_data.describe())
 
     # Compute threshold from test set
     alpha = 1.25
     threshold = np.max(reconstruction_scores) * alpha
     print("Anomaly score threshold: %f" % threshold)
+
 
 if __name__ == '__main__':
     main()
