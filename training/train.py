@@ -70,19 +70,19 @@ def create_model(input_dim):
     input_data = Input(shape=(input_dim,), name='INPUT0')
 
     # hidden layers
-    encoder = Dense(48, activation='tanh', name='encoder_1')(input_data)
-    encoder = Dropout(.1)(encoder)
+    encoder = Dense(24, activation='tanh', name='encoder_1')(input_data)
+    encoder = Dropout(.15)(encoder)
     encoder = Dense(16, activation='tanh', name='encoder_2')(encoder)
-    encoder = Dropout(.1)(encoder)
+    encoder = Dropout(.15)(encoder)
 
     # bottleneck layer
     latent_encoding = Dense(latent_dim, activation='linear', name='latent_encoding')(encoder)
 
     # The decoder network is a mirror image of the encoder network
     decoder = Dense(16, activation='tanh', name='decoder_1')(latent_encoding)
-    decoder = Dropout(.1)(decoder)
-    decoder = Dense(48, activation='tanh', name='decoder_2')(decoder)
-    decoder = Dropout(.1)(decoder)
+    decoder = Dropout(.15)(decoder)
+    decoder = Dense(24, activation='tanh', name='decoder_2')(decoder)
+    decoder = Dropout(.15)(decoder)
 
     # The output is the same dimension as the input data we are reconstructing
     reconstructed_data = Dense(input_dim, activation='linear', name='OUTPUT0')(decoder)
