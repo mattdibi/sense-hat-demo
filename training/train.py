@@ -14,7 +14,7 @@ from tensorflow.keras.layers import Input, Dense, Dropout
 
 def get_options():
     DEFAULT_TRAIN_DATA_PATH = "train-raw.csv"
-    DEFAULT_SAVED_MODEL_NAME = "autoencoder"
+    DEFAULT_SAVED_MODEL_NAME = os.path.join("saved_model", "autoencoder")
 
     # Get options
     parser = argparse.ArgumentParser(
@@ -32,7 +32,7 @@ def get_options():
     args = parser.parse_args()
 
     train_data_path = args.train_data_path
-    trained_model_path = os.path.join("saved_model", args.saved_model_name)
+    trained_model_path = args.saved_model_name
 
     return train_data_path, trained_model_path
 
