@@ -15,6 +15,31 @@ from tensorflow.keras import optimizers
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense, Dropout
 
+def get_options():
+    DEFAULT_TRAIN_DATA_PATH = "train-raw.csv"
+    DEFAULT_SAVED_MODEL_NAME = "autoencoder"
+
+    # Get options
+    parser = argparse.ArgumentParser(
+            description="Training script for Kura AI Wire Component anomaly detection",
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument(
+            "-t", "--train_data_path",
+            help="Path to .csv training set",
+            type=str, required=False, default=DEFAULT_TRAIN_DATA_PATH)
+    parser.add_argument(
+            "-s", "--saved_model_name",
+            help="Folder where the trained model will be saved to",
+            type=str, required=False, default=DEFAULT_SAVED_MODEL_NAME)
+
+    args = parser.parse_args()
+
+    train_data_path = args.train_data_path
+    trained_model_path = os.path.join("saved_model", args.saved_model_name)
+
+    return train_data_path, trained_model_path
+
+
 def preprocessing(data):
     # Select features
     features = ['MAGNET_X', ' MAGNET_Z', ' MAGNET_Y', ' ACC_Y',
@@ -32,6 +57,7 @@ def preprocessing(data):
     scaled_train_data = (data - min) / (max - min)
 
     return scaled_train_data
+
 
 def create_model(input_dim):
     # Latent space dimension
@@ -63,27 +89,9 @@ def create_model(input_dim):
 
     return autoencoder_model
 
+
 def main():
-    DEFAULT_TRAIN_DATA_PATH = "train-raw.csv"
-    DEFAULT_SAVED_MODEL_NAME = "autoencoder"
-
-    # Get options
-    parser = argparse.ArgumentParser(
-            description="Training script for Kura AI Wire Component anomaly detection",
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument(
-            "-t", "--train_data_path",
-            help="Path to .csv training set",
-            type=str, required=False, default=DEFAULT_TRAIN_DATA_PATH)
-    parser.add_argument(
-            "-s", "--saved_model_name",
-            help="Folder where the trained model will be saved to",
-            type=str, required=False, default=DEFAULT_SAVED_MODEL_NAME)
-
-    args = parser.parse_args()
-
-    train_data_path = args.train_data_path
-    trained_model_path = os.path.join("saved_model", args.saved_model_name)
+    train_data_path, trained_model_path = get_options()
 
     # ########
     # Preprocessing
@@ -92,7 +100,7 @@ def main():
 
     scaled_train_data = preprocessing(train_data)
 
-    x_train, x_test = train_test_split(scaled_train_data, test_size=0.2, random_state=42)
+    x_train, x_test = train_test_split(scaled_train_data, test_size=0.15, random_state=42)
     x_train = x_train.astype(np.float32)
     x_test = x_test.astype(np.float32)
 
@@ -131,7 +139,7 @@ def main():
     # Compute threshold from test set
     alpha = 1.25
     threshold = np.max(reconstruction_scores) * alpha
-    print(threshold)
+    print("Anomaly score threshold: %f" % threshold)
 
 if __name__ == '__main__':
     main()
