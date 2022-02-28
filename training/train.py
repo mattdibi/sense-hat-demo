@@ -39,17 +39,25 @@ def get_options():
 
 def preprocessing(data):
     # Select features
-    features = ['MAGNET_X', ' MAGNET_Z', ' MAGNET_Y', ' ACC_Y',
-                ' ACC_X', ' ACC_Z', ' PRESSURE', ' TEMP_PRESS', ' TEMP_HUM',
-                ' HUMIDITY', ' GYRO_X', ' GYRO_Y', ' GYRO_Z']
+    features = ['ACC_Y', 'ACC_X', 'ACC_Z',
+                'PRESSURE', 'TEMP_PRESS', 'TEMP_HUM',
+                'HUMIDITY', 'GYRO_X', 'GYRO_Y', 'GYRO_Z']
 
     data = data[features]
+
+    print("Data used in the Triton preprocessor")
+    print("-------Min--------")
+    print(data.min())
+    print("-------Max--------")
+    print(data.max())
+    print("------------------")
+
     data = data.to_numpy()
 
     # MinMax scaling
-    #         MAGNET_X   MAGNET_Z   MAGNET_Y     ACC_Y     ACC_X     ACC_Z    PRESSURE   TEMP_PRESS   TEMP_HUM   HUMIDITY    GYRO_X    GYRO_Y    GYRO_Z
-    min = np.array([-1.8199598e+01, 1.3105305e+01, -3.1945429e+01, -1.0663300e-01, -3.1721205e-01, 8.5927510e-01, 9.9792896e+02, 3.4666668e+01, 3.6153427e+01, 2.0175404e+01, -2.1469840e+00, -1.3511374e+00, -5.0122184e-01])
-    max = np.array([3.7974422e+00, 1.7207603e+01, -2.4966690e+01, 1.1758627e-01, 2.4764843e-01, 1.1285601e+00, 9.9812500e+02, 3.6097916e+01, 3.7271065e+01, 2.3081772e+01, 1.8424674e+00, 7.2500044e-01, 4.4410592e-01])
+    #                  ACC_Y     ACC_X     ACC_Z    PRESSURE   TEMP_PRESS   TEMP_HUM   HUMIDITY    GYRO_X    GYRO_Y    GYRO_Z
+    min = np.array([-0.132551, -0.049693, 0.759847, 976.001709, 38.724998, 40.220890, 13.003981, -1.937896, -0.265019, -0.250647])
+    max = np.array([ 0.093099, 0.150289, 1.177543, 1007.996338, 46.093750, 48.355824, 23.506138, 1.923712, 0.219204, 0.671759])
 
     scaled_train_data = (data - min) / (max - min)
 
