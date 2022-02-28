@@ -23,11 +23,11 @@ In order to be able to execute this demo on a RaspberryPi board, these requireme
 
 ## Steps to reproduce the demo
 
-Step 1 is not mandatory, some data is available in the [training folder](training/). However, since the environmental conditions may be different from where the data was originally collected, it is recommended to recollect the data to have a reliable anomaly detector.
+- **Step 1** is not mandatory, some data is available in the [training folder](training/). However, since the environmental conditions may be different from where the data was originally collected, it is recommended to recollect the data to have a reliable anomaly detector.
 
-Step 2 performs the training of the models that are later loaded in the inference server.
+- **Step 2** performs the training of the models that are later loaded in the inference server.
 
-Step 3 describes how to run the inference server and how to set up the Anomaly Detector in Kura.
+- **Step 3** describes how to run the inference server and how to set up the Anomaly Detector in Kura.
 
 ## 1. Data collection
 
@@ -149,6 +149,6 @@ models
 
 First, create an `org.eclipse.kura.ai.triton.server.TritonServerService` instance under "Services". Configure it by setting the **Nvidia Triton Server address** to the IP of the machine where the inference server is running. Add `preprocessor,postprocessor,tf_autoencoder_fp32,ensemble_pipeline` to the **Inference Models** list. If you used the command above to run the docker container, you shouldn't need to modify **Nvidia Triton Server ports**.
 
-After having set up the inference service, apply the [anomaly detection snapshot](snapshots/graph-anomaly-detector.xml) to create the Kura Wire Graph that performs anomaly detection. In summary, such graph reads the inputs from the "asset-sensehat" every 1s, performs the inference using an AI Wire Component, and processes the outputs using a Script Filter to color by red the led matrix of the SenseHat if an anomaly has occurred, green if no anomaly is detected. Since the training was done also on the accelerometer features, it is sufficient to move the raspberry to trigger the detection of an anomaly.
+After having set up the inference service, apply the [anomaly detection snapshot](snapshots/graph-anomaly-detector.xml) to create the Kura Wire Graph that performs anomaly detection. In summary, such graph reads the inputs from the "asset-sensehat" every 1s, performs the inference using an AI Wire Component, and processes the outputs using a Script Filter to color by red the led matrix of the SenseHat if an anomaly has occurred, green if no anomaly is detected. Since the training was done also on the accelerometer features, it is sufficient to move the RaspberryPi to trigger the detection of an anomaly.
 
 A possible expansion of this demo could consider using the other output of the inference process, namely `ANOMALY_SCORE0`, to change the gradient of the led coloring so that it will be brighter according to extent of the measured anomaly.
