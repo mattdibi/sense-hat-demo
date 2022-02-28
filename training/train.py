@@ -5,15 +5,12 @@ import os.path
 
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 
-import matplotlib.pyplot as plt
-
-import tensorflow as tf
 from tensorflow.keras import optimizers
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense, Dropout
+
 
 def get_options():
     DEFAULT_TRAIN_DATA_PATH = "train-raw.csv"
