@@ -139,7 +139,7 @@ def main():
     print(anomaly_data.describe())
 
     # Compute threshold from test set
-    alpha = 1.25
+    alpha = 1.5
     threshold = np.max(reconstruction_scores) * alpha
     print("Anomaly score threshold: %f" % threshold)
 
