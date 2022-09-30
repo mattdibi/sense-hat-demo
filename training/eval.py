@@ -15,7 +15,7 @@ from train import get_options
 
 from sklearn.metrics import mean_squared_error
 
-OUT_LY_IDX = 10
+OUT_LY_IDX = 6
 
 def main():
     train_data_path, trained_model_path = get_options()
@@ -28,7 +28,7 @@ def main():
 
     # Grab first sample
     input_sample = scaled_train_data[3:4].copy()
-    input_sample[0][2] = 0.15
+    # input_sample[0][4] = 1.0
     print("Input data:")
     print(input_sample)
     print()

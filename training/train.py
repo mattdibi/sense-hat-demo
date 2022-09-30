@@ -14,7 +14,7 @@ from tensorflow.keras.layers import Input, Dense, Dropout
 
 
 def get_options():
-    DEFAULT_TRAIN_DATA_PATH = "new-train-raw.csv"
+    DEFAULT_TRAIN_DATA_PATH = "DEMO-ECLIPSECON_dl05_data.csv"
     DEFAULT_SAVED_MODEL_NAME = os.path.join("saved_model", "autoencoder")
 
     # Get options
@@ -40,18 +40,18 @@ def get_options():
 
 def preprocessing(data):
     # Select features
-    features = ['ACC_Y', 'ACC_X', 'ACC_Z',
-                'PRESSURE', 'TEMP_PRESS', 'TEMP_HUM',
-                'HUMIDITY', 'GYRO_X', 'GYRO_Y', 'GYRO_Z']
+    features = ['x0', 'x1', 'x2', 'x3', 'v2000']
 
     data = data[features]
+    data.replace({False: 0.0, True: 1.0}, inplace=True)
+    data["x2"][0] = 1.0
 
-    # print("Data used in the Triton preprocessor")
-    # print("-----------Min-----------")
-    # print(data.min())
-    # print("-----------Max-----------")
-    # print(data.max())
-    # print("-------------------------")
+    print("Data used in the Triton preprocessor")
+    print("-----------Min-----------")
+    print(data.min())
+    print("-----------Max-----------")
+    print(data.max())
+    print("-------------------------")
 
     data = data.to_numpy()
 
@@ -63,25 +63,21 @@ def preprocessing(data):
 
 def create_model(input_dim):
     # Latent space dimension
-    latent_dim = 4
+    latent_dim = 2
 
     # The encoder will consist of a number of dense layers that decrease in size
     # as we taper down towards the bottleneck of the network, the latent space
     input_data = Input(shape=(input_dim,), name='INPUT0')
 
     # hidden layers
-    encoder = Dense(24, activation='tanh', name='encoder_1')(input_data)
-    encoder = Dropout(.15)(encoder)
-    encoder = Dense(16, activation='tanh', name='encoder_2')(encoder)
+    encoder = Dense(4, activation='tanh', name='encoder_1')(input_data)
     encoder = Dropout(.15)(encoder)
 
     # bottleneck layer
     latent_encoding = Dense(latent_dim, activation='linear', name='latent_encoding')(encoder)
 
     # The decoder network is a mirror image of the encoder network
-    decoder = Dense(16, activation='tanh', name='decoder_1')(latent_encoding)
-    decoder = Dropout(.15)(decoder)
-    decoder = Dense(24, activation='tanh', name='decoder_2')(decoder)
+    decoder = Dense(4, activation='tanh', name='decoder_1')(latent_encoding)
     decoder = Dropout(.15)(decoder)
 
     # The output is the same dimension as the input data we are reconstructing
@@ -102,7 +98,7 @@ def main():
 
     scaled_train_data = preprocessing(train_data)
 
-    x_train, x_test = train_test_split(scaled_train_data, test_size=0.3, random_state=42)
+    x_train, x_test = train_test_split(scaled_train_data, test_size=0.4, random_state=42)
     x_train = x_train.astype(np.float32)
     x_test = x_test.astype(np.float32)
 
@@ -115,8 +111,8 @@ def main():
     # ########
     # Training
     # ########
-    batch_size = 64
-    max_epochs = 10
+    batch_size = 256
+    max_epochs = 200
     learning_rate = .0001
 
     opt = optimizers.Adam(learning_rate=learning_rate)
@@ -140,7 +136,7 @@ def main():
 
     # Compute threshold from test set
     alpha = 1.5
-    threshold = np.max(reconstruction_scores) * alpha
+    threshold = np.mean(reconstruction_scores) * alpha
     print("Anomaly score threshold: %f" % threshold)
 
 
