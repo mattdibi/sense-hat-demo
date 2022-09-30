@@ -46,12 +46,12 @@ def preprocessing(data):
 
     data = data[features]
 
-    print("Data used in the Triton preprocessor")
-    print("-----------Min-----------")
-    print(data.min())
-    print("-----------Max-----------")
-    print(data.max())
-    print("-------------------------")
+    # print("Data used in the Triton preprocessor")
+    # print("-----------Min-----------")
+    # print(data.min())
+    # print("-----------Max-----------")
+    # print(data.max())
+    # print("-------------------------")
 
     data = data.to_numpy()
 
