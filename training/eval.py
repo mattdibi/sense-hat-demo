@@ -13,6 +13,9 @@ import tensorflow as tf
 from train import preprocessing
 from train import get_options
 
+from sklearn.metrics import mean_squared_error
+
+OUT_LY_IDX = 10
 
 def main():
     train_data_path, trained_model_path = get_options()
@@ -25,6 +28,7 @@ def main():
 
     # Grab first sample
     input_sample = scaled_train_data[3:4].copy()
+    input_sample[0][2] = 0.15
     print("Input data:")
     print(input_sample)
     print()
@@ -40,10 +44,17 @@ def main():
 
     # Inference on input sample
     reconstructed_sample = neuron_state_extractor.predict(input_sample)
-    print("Reconstructed data:")
+
+    print("Neural network status:")
     print(reconstructed_sample)
     print()
 
+
+    print("Reconstructed data:")
+    print(reconstructed_sample[OUT_LY_IDX])
+    print()
+
+    print("MSE %f.6" % mean_squared_error(input_sample, reconstructed_sample[OUT_LY_IDX]))
 
 if __name__ == '__main__':
     main()
