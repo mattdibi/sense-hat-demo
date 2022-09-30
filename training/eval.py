@@ -33,8 +33,13 @@ def main():
     autoencoder_model = tf.keras.models.load_model(trained_model_path)
     # autoencoder_model.summary()
 
+    neuron_state_extractor = tf.keras.Model(
+            inputs=autoencoder_model.inputs,
+            outputs=[layer.output for layer in autoencoder_model.layers],
+    )
+
     # Inference on input sample
-    reconstructed_sample = autoencoder_model.predict(input_sample)
+    reconstructed_sample = neuron_state_extractor.predict(input_sample)
     print("Reconstructed data:")
     print(reconstructed_sample)
     print()
