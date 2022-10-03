@@ -71,22 +71,17 @@ class TritonPythonModel:
         # and create a pb_utils.InferenceResponse for each of them.
         for request in requests:
 
-            acc_x      = pb_utils.get_input_tensor_by_name(request, "ACC_X").as_numpy()
-            acc_y      = pb_utils.get_input_tensor_by_name(request, "ACC_Y").as_numpy()
-            acc_z      = pb_utils.get_input_tensor_by_name(request, "ACC_Z").as_numpy()
-            gyro_x     = pb_utils.get_input_tensor_by_name(request, "GYRO_X").as_numpy()
-            gyro_y     = pb_utils.get_input_tensor_by_name(request, "GYRO_Y").as_numpy()
-            gyro_z     = pb_utils.get_input_tensor_by_name(request, "GYRO_Z").as_numpy()
-            humidity   = pb_utils.get_input_tensor_by_name(request, "HUMIDITY").as_numpy()
-            pressure   = pb_utils.get_input_tensor_by_name(request, "PRESSURE").as_numpy()
-            temp_hum   = pb_utils.get_input_tensor_by_name(request, "TEMP_HUM").as_numpy()
-            temp_press = pb_utils.get_input_tensor_by_name(request, "TEMP_PRESS").as_numpy()
+            x0        = pb_utils.get_input_tensor_by_name(request, "x0").as_numpy()
+            x1        = pb_utils.get_input_tensor_by_name(request, "x1").as_numpy()
+            x2        = pb_utils.get_input_tensor_by_name(request, "x2").as_numpy()
+            x3        = pb_utils.get_input_tensor_by_name(request, "x3").as_numpy()
+            v2000     = pb_utils.get_input_tensor_by_name(request, "v2000").as_numpy()
 
-            out_0 = np.array([acc_y, acc_x, acc_z, pressure, temp_press, temp_hum, humidity, gyro_x, gyro_y, gyro_z]).transpose()
+            out_0 = np.array([x0, x1, x2, x3, v2000]).transpose()
 
-            #                  ACC_Y     ACC_X     ACC_Z    PRESSURE   TEMP_PRESS   TEMP_HUM   HUMIDITY    GYRO_X    GYRO_Y    GYRO_Z
-            min = np.array([-0.132551, -0.049693, 0.759847, 976.001709, 38.724998, 40.220890, 13.003981, -1.937896, -0.265019, -0.250647])
-            max = np.array([ 0.093099, 0.150289, 1.177543, 1007.996338, 46.093750, 48.355824, 23.506138, 1.923712, 0.219204, 0.671759])
+            #                  x0          x1        x2         x3      v2000
+            min = np.array([ 0.000000,  0.000000, 0.000000, 0.000000, 3.619048])
+            max = np.array([ 1.000000,  1.000000, 0.000000, 0.000000, 7.511600])
 
             # MinMax scaling
             out_0_scaled = (out_0 - min)/(max - min)

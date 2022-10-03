@@ -3,70 +3,35 @@ backend: "python"
 
 input [
   {
-    name: "ACC_X"
+    name: "x0"
     data_type: TYPE_FP32
     dims: [ 1 ]
   }
 ]
 input [
   {
-    name: "ACC_Y"
+    name: "x1"
     data_type: TYPE_FP32
     dims: [ 1 ]
   }
 ]
 input [
   {
-    name: "ACC_Z"
+    name: "x2"
     data_type: TYPE_FP32
     dims: [ 1 ]
   }
 ]
 input [
   {
-    name: "GYRO_X"
+    name: "x3"
     data_type: TYPE_FP32
     dims: [ 1 ]
   }
 ]
 input [
   {
-    name: "GYRO_Y"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "GYRO_Z"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "HUMIDITY"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "PRESSURE"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "TEMP_HUM"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "TEMP_PRESS"
+    name: "v2000"
     data_type: TYPE_FP32
     dims: [ 1 ]
   }
@@ -75,7 +40,7 @@ output [
   {
     name: "INPUT0"
     data_type: TYPE_FP32
-    dims: [ 1, 10 ]
+    dims: [ 1, 5 ]
   }
 ]
 instance_group [{ kind: KIND_CPU }]
