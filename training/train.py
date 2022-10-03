@@ -14,7 +14,7 @@ from tensorflow.keras.layers import Input, Dense, Dropout
 
 
 def get_options():
-    DEFAULT_TRAIN_DATA_PATH = "DEMO-ECLIPSECON_dl05_data.csv"
+    DEFAULT_TRAIN_DATA_PATH = "DEMO-ECLIPSECON-2022-10-dl05_data.csv"
     DEFAULT_SAVED_MODEL_NAME = os.path.join("saved_model", "autoencoder")
 
     # Get options
@@ -43,8 +43,6 @@ def preprocessing(data):
     features = ['x0', 'x1', 'x2', 'x3', 'v2000']
 
     data = data[features]
-    data.replace({False: 0.0, True: 1.0}, inplace=True)
-    data["x2"][0] = 1.0
 
     print("Data used in the Triton preprocessor")
     print("-----------Min-----------")
