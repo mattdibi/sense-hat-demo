@@ -3,70 +3,35 @@ platform: "ensemble"
 max_batch_size: 0
 input [
   {
-    name: "ACC_X"
+    name: "x0"
     data_type: TYPE_FP32
     dims: [ 1 ]
   }
 ]
 input [
   {
-    name: "ACC_Y"
+    name: "x1"
     data_type: TYPE_FP32
     dims: [ 1 ]
   }
 ]
 input [
   {
-    name: "ACC_Z"
+    name: "x2"
     data_type: TYPE_FP32
     dims: [ 1 ]
   }
 ]
 input [
   {
-    name: "GYRO_X"
+    name: "x3"
     data_type: TYPE_FP32
     dims: [ 1 ]
   }
 ]
 input [
   {
-    name: "GYRO_Y"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "GYRO_Z"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "HUMIDITY"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "PRESSURE"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "TEMP_HUM"
-    data_type: TYPE_FP32
-    dims: [ 1 ]
-  }
-]
-input [
-  {
-    name: "TEMP_PRESS"
+    name: "v2000"
     data_type: TYPE_FP32
     dims: [ 1 ]
   }
@@ -91,44 +56,24 @@ ensemble_scheduling {
       model_name: "preprocessor"
       model_version: -1
       input_map{
-          key: "ACC_X"
-          value: "ACC_X"
+          key: "x0"
+          value: "x0"
       }
       input_map{
-          key: "ACC_Y"
-          value: "ACC_Y"
+          key: "x1"
+          value: "x1"
       }
       input_map{
-          key: "ACC_Z"
-          value: "ACC_Z"
+          key: "x2"
+          value: "x2"
       }
       input_map{
-          key: "GYRO_X"
-          value: "GYRO_X"
+          key: "x3"
+          value: "x3"
       }
       input_map{
-          key: "GYRO_Y"
-          value: "GYRO_Y"
-      }
-      input_map{
-          key: "GYRO_Z"
-          value: "GYRO_Z"
-      }
-      input_map{
-          key: "HUMIDITY"
-          value: "HUMIDITY"
-      }
-      input_map{
-          key: "PRESSURE"
-          value: "PRESSURE"
-      }
-      input_map{
-          key: "TEMP_HUM"
-          value: "TEMP_HUM"
-      }
-      input_map{
-          key: "TEMP_PRESS"
-          value: "TEMP_PRESS"
+          key: "v2000"
+          value: "v2000"
       }
       output_map {
         key: "INPUT0"
