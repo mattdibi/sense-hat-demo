@@ -109,8 +109,8 @@ def main():
     # ########
     # Training
     # ########
-    batch_size = 256
-    max_epochs = 200
+    batch_size = 128
+    max_epochs = 250
     learning_rate = .0001
 
     opt = optimizers.Adam(learning_rate=learning_rate)
