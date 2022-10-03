@@ -81,7 +81,7 @@ class TritonPythonModel:
 
             #                  x0          x1        x2         x3      v2000
             min = np.array([ 0.000000,  0.000000, 0.000000, 0.000000, 3.619048])
-            max = np.array([ 1.000000,  1.000000, 0.000000, 0.000000, 7.511600])
+            max = np.array([ 1.000000,  1.000000, 1.000000, 1.000000, 7.511600])
 
             # MinMax scaling
             out_0_scaled = (out_0 - min)/(max - min)
